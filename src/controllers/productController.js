@@ -49,10 +49,14 @@ const updateProduct = async (req, res) => {
     }
 
     try {
-        const result = await productRepository(name,  quantity_stock, product_id);
+        const result = await productRepository.update(name,  quantity_stock, product_id);
+        if (!result) {
+            res.status(400).json({ message: 'Erro ao atualizar produto!' })
+        }
+
         res.status(200).json({ message: 'Produto atualizado com sucesso!' })
     } catch(error) {
-        res.status(500).json({ message: 'Erro ao atualizar produto!' })
+        res.status(500).json({ error: 'Erro ao atualizar produto!' })
     }
 }
 
@@ -60,10 +64,14 @@ const deleteProduct = async (req, res) => {
     const product_id = req.params.id;
 
     try {
-        const result = await productRepository(product_id);
+        const result = await productRepository.delete(product_id);
+        if (!result) {
+            res.status(400).json({ message: 'Erro ao remover produto!' })
+        }
+
         res.status(200).json({ message: result })
     } catch(error) {
-        res.status(500).json({ message: 'Erro ao excluir produto' })
+        res.status(500).json({ message: 'Erro ao remover produto' })
     }
 }
 
